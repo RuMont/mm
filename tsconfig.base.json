@@ -15,7 +15,7 @@
     "skipDefaultLibCheck": true,
     "baseUrl": ".",
     "paths": {
-      "@entities": ["libs/entities/src/index.ts"]
+      "@schemas/*": ["./libs/schemas/src/*"]
     }
   },
   "exclude": ["node_modules", "tmp"]

@@ -1,26 +1,30 @@
-import 'reflect-metadata';
 import { Hono } from 'hono';
 import { serve } from '@hono/node-server';
-import { dataSource } from './data-source';
+import { prettyJSON } from 'hono/pretty-json';
+import { cors } from 'hono/cors';
+import { logger } from 'hono/logger'
+import { envVars } from './env';
+import users from './controllers/users';
 
 try {
-  (async () => {
-    await dataSource.initialize();
+  const app = new Hono();
 
-    const app = new Hono();
+  app.use(prettyJSON());
+  app.use('/*', cors());
+  app.use(logger());
 
-    app.get('/', (c) => c.json({ message: 'Welcome to the API!' }));
+  app.route('/users', users);
 
-    // Start the server
-    const port = process.env.PORT || 3000;
+  app.get('/', (c) => c.json({ message: 'Welcome to the API!' }));
 
-    serve({
-      fetch: app.fetch,
-      port: Number(port),
-    });
+  const port = envVars.port;
 
-    console.log(`Server is running on http://localhost:${port}`);
-  })();
+  serve({
+    fetch: app.fetch,
+    port: Number(port),
+  });
+
+  console.log(`Server is running on http://localhost:${port}`);
 } catch (error) {
   console.log(error);
 }

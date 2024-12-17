@@ -1,7 +1,7 @@
 {
-  "name": "entities",
+  "name": "schemas",
   "$schema": "../../node_modules/nx/schemas/project-schema.json",
-  "sourceRoot": "libs/entities/src",
+  "sourceRoot": "libs/schemas/src",
   "projectType": "library",
   "tags": [],
   "targets": {
@@ -9,12 +9,11 @@
       "executor": "@nx/esbuild:esbuild",
       "outputs": ["{options.outputPath}"],
       "options": {
-        "outputPath": "dist/libs/entities",
-        "main": "libs/entities/src/index.ts",
-        "tsConfig": "libs/entities/tsconfig.lib.json",
+        "outputPath": "dist/libs/schemas",
+        "main": "libs/schemas/src/index.ts",
+        "tsConfig": "libs/schemas/tsconfig.lib.json",
         "format": ["cjs"],
-        "assets": [],
-        "generatePackageJson": true
+        "assets": []
       }
     }
   }
