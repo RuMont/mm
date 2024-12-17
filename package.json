@@ -27,6 +27,7 @@
     "@swc-node/register": "~1.9.1",
     "@swc/core": "~1.5.7",
     "@swc/helpers": "~0.5.11",
+    "@types/bcrypt": "^5.0.2",
     "@types/jest": "^29.5.12",
     "@types/node": "18.16.9",
     "@typescript-eslint/utils": "^8.13.0",
@@ -61,8 +62,12 @@
     "@angular/router": "~19.0.0",
     "@hono/node-server": "^1.13.7",
     "axios": "^1.6.0",
+    "bcrypt": "^5.1.1",
+    "better-sqlite3": "^9.6.0",
     "hono": "^4.6.14",
+    "reflect-metadata": "^0.2.2",
     "rxjs": "~7.8.0",
+    "typeorm": "^0.3.20",
     "zone.js": "~0.15.0"
   }
 }

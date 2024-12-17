@@ -1,16 +1,26 @@
+import 'reflect-metadata';
 import { Hono } from 'hono';
 import { serve } from '@hono/node-server';
+import { dataSource } from './data-source';
 
-const app = new Hono();
+try {
+  (async () => {
+    await dataSource.initialize();
 
-app.get('/api', (c) => c.json({ message: 'Welcome to the API!' }));
+    const app = new Hono();
 
-// Start the server
-const port = process.env.PORT || 3000;
+    app.get('/', (c) => c.json({ message: 'Welcome to the API!' }));
 
-serve({
-  fetch: app.fetch,
-  port: Number(port),
-});
+    // Start the server
+    const port = process.env.PORT || 3000;
 
-console.log(`Server is running on http://localhost:${port}`);
+    serve({
+      fetch: app.fetch,
+      port: Number(port),
+    });
+
+    console.log(`Server is running on http://localhost:${port}`);
+  })();
+} catch (error) {
+  console.log(error);
+}
