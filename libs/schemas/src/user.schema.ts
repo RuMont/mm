@@ -15,3 +15,8 @@ export const insertUserSchema = createInsertSchema(user, {
   password: z.string(),
 });
 export const updateUserSchema = insertUserSchema.partial();
+
+export type CreateUserDto = typeof user.$inferInsert;
+export type UpdateUserDto = CreateUserDto & {
+  id: (typeof user.$inferSelect)['id'];
+};
