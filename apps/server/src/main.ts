@@ -5,6 +5,7 @@ import { cors } from 'hono/cors';
 import { logger } from 'hono/logger';
 import { users } from './controllers/users';
 import { CONFIG } from './config';
+import { auth } from './controllers/auth';
 
 try {
   const app = new Hono();
@@ -14,6 +15,7 @@ try {
   app.use(logger());
 
   app.route('/users', users);
+  app.route('/auth', auth);
 
   app.get('/', (c) => c.json({ message: 'Welcome to the API!' }));
 

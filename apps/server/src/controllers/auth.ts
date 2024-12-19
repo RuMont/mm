@@ -1,4 +1,5 @@
 import { Hono } from 'hono';
+import { HTTPException } from 'hono/http-exception';
 import { type AuthCredentials } from '@mmtypes/AuthCredentials';
 import { authService } from '../services/auth';
 
@@ -9,17 +10,24 @@ auth.post('/login', async (c) => {
 
   try {
     const token = await authService.login(body);
-    c.json({
+    return c.json({
       message: 'Ingreso realizado con éxito',
       token,
     });
   } catch (e: unknown) {
-    const error = e as Error;
-    c.json(
-      {
-        error: error.message,
-      },
-      401
-    );
+    const { message } = e as Error;
+    throw new HTTPException(401, {
+      res: new Response(
+        JSON.stringify({
+          message,
+        }),
+        {
+          status: 401,
+          headers: {
+            'Content-Type': 'application/json',
+          },
+        }
+      ),
+    });
   }
 });

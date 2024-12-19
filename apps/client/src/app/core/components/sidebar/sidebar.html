@@ -1,0 +1,24 @@
+<div
+  [class]="'h-16 bg-emerald-900 flex gap-2 items-center justify-between ' + (uiService.sidebarExpanded() ? 'p-6' : 'p-5')"
+>
+  <a (click)="closeIfSmallScreen()" routerLink="/dashboard">
+    <span [class.hidden]="!uiService.sidebarExpanded()">Home</span>
+    <lucide-icon [class.hidden]="uiService.sidebarExpanded()" [img]="Home" />
+  </a>
+  <button (click)="uiService.toggleSidebar(false)" class="text-white md:hidden">
+    <lucide-icon [img]="X" />
+  </button>
+</div>
+<div class="h-full max-h-full overflow-y-auto flex flex-col gap-2 p-3 bg-emerald-900" [class.p-4]="uiService.sidebarExpanded()">
+  @for (item of uiService.menu; track $index) {
+  <a
+    [routerLink]="item.path"
+    (click)="closeIfSmallScreen()"
+    class="text-white p-2 flex gap-2 hover:bg-emerald-200 hover:text-black rounded transition-colors"
+    [title]="item.label"
+  >
+    <lucide-icon [img]="item.icon" />
+    <p [class.hidden]="!uiService.sidebarExpanded()">{{item.label}}</p>
+  </a>
+  }
+</div>

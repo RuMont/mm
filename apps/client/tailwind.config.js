@@ -8,7 +8,21 @@ module.exports = {
     ...createGlobPatternsForDependencies(__dirname),
   ],
   theme: {
-    extend: {},
+    extend: {
+      keyframes: {
+        slideRight: {
+          '0%': { transform: 'translateX(-50vw)' },
+          '100%': { transform: 'translateX(150vw)' },
+        },
+      },
+      animation: {
+        loading: 'slideRight 1s linear infinite',
+      },
+      transitionProperty: {
+        height: 'height',
+        width: 'width',
+      },
+    },
   },
   plugins: [],
 };

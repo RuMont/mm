@@ -11,7 +11,7 @@ export const jwtAuth: MiddlewareHandler = async (c, next) => {
 
   try {
     const decoded = jwt.verify(token, CONFIG.SECRET);
-    c.set('user', decoded); // Attach decoded user info to the context
+    c.set('user', decoded);
     await next();
   } catch (err) {
     return c.json({ error: 'Invalid or expired token' }, 403);

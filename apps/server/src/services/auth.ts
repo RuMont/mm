@@ -1,5 +1,5 @@
 import { AuthCredentials } from '@mmtypes/AuthCredentials';
-import { TokenOrFail } from '@mmtypes/TokenOrFail';
+import { TokenOrFail } from '@mmtypes/server/TokenOrFail';
 import { usersService } from './users';
 import { comparePassword } from '../utils/password';
 import jwt from 'jsonwebtoken';
@@ -13,14 +13,14 @@ async function login(credentials: AuthCredentials): Promise<TokenOrFail> {
     credentials.username,
     true
   );
-  if (!user) throw new Error('Invalid credentials');
+  if (!user) throw new Error('Credenciales no válidas');
 
   const isPasswordValid = await comparePassword(
     credentials.password,
     user.password
   );
   if (!isPasswordValid) {
-    throw new Error('Invalid credentials');
+    throw new Error('Credenciales no válidas');
   }
 
   const FOUR_HOURS = 14400;
@@ -34,7 +34,6 @@ async function login(credentials: AuthCredentials): Promise<TokenOrFail> {
   );
 
   await createAccess(user.id, token, FOUR_HOURS);
-
   return token;
 }
 

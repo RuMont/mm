@@ -26,7 +26,7 @@ users.get('/:id', zValidator('param', idParamSchema), async (c) => {
   const [foundUser] = await usersService.getUserById(id);
 
   if (!foundUser) {
-    return c.json({ error: `User with ID ${id} not found` }, 404);
+    return c.json({ error: `Usuario con id ${id} no encontrado` }, 404);
   }
 
   return c.json({ user: foundUser });
@@ -37,7 +37,7 @@ users.post('/', zValidator('json', insertUserSchema), async (c) => {
 
   const [newUser] = await usersService.createUser(body);
 
-  return c.json({ message: 'User created successfully', user: newUser }, 201);
+  return c.json({ message: 'Usuario creado con éxito', user: newUser }, 201);
 });
 
 users.put(
@@ -52,12 +52,12 @@ users.put(
 
     if (!updatedUser) {
       return c.json(
-        { error: `User with ID ${id} not found or not updated` },
+        { error: `Usuario con id ${id} no encontrado o no actualizado` },
         404
       );
     }
 
-    return c.json({ message: 'User updated successfully', user: updatedUser });
+    return c.json({ message: 'Usuario actualizado con éxito', user: updatedUser });
   }
 );
 
@@ -67,8 +67,8 @@ users.delete('/:id', zValidator('param', idParamSchema), async (c) => {
   const [deletedUser] = await usersService.deleteUser(id);
 
   if (!deletedUser) {
-    return c.json({ error: `User with ID ${id} not found` }, 404);
+    return c.json({ error: `Usuario con id ${id} no encontrado` }, 404);
   }
 
-  return c.json({ message: 'User deleted successfully', user: deletedUser });
+  return c.json({ message: 'Usuario eliminado con éxito', user: deletedUser });
 });
