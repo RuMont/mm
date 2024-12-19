@@ -15,7 +15,8 @@
     "skipDefaultLibCheck": true,
     "baseUrl": ".",
     "paths": {
-      "@schemas/*": ["./libs/schemas/src/*"]
+      "@mmschemas/*": ["./libs/schemas/src/*"],
+      "@mmtypes/*": ["./types/*"]
     }
   },
   "exclude": ["node_modules", "tmp"]

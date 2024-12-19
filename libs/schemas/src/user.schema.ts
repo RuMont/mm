@@ -2,6 +2,8 @@ import { sqliteTable, text } from 'drizzle-orm/sqlite-core';
 import { createInsertSchema } from 'drizzle-zod';
 import { z } from 'zod';
 import { id, timestamps } from './columns.helpers';
+import { relations } from 'drizzle-orm';
+import { access } from './access.schema';
 
 export const user = sqliteTable('users', {
   ...id,
@@ -9,6 +11,10 @@ export const user = sqliteTable('users', {
   password: text('password').notNull(),
   ...timestamps,
 });
+
+export const userRelations = relations(user, ({ many }) => ({
+  accesses: many(access),
+}));
 
 export const insertUserSchema = createInsertSchema(user, {
   username: z.string(),

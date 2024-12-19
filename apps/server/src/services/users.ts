@@ -1,8 +1,8 @@
 import {
-  CreateUserDto,
-  UpdateUserDto,
+  type CreateUserDto,
+  type UpdateUserDto,
   user,
-} from '@schemas/user.schema';
+} from '@mmschemas/user.schema';
 import DB from '../db/config';
 import { eq } from 'drizzle-orm';
 import { hashPassword } from '../utils/password';
@@ -25,6 +25,19 @@ async function getUserById(id: number) {
   })
     .from(user)
     .where(eq(user.id, id))
+    .limit(1);
+}
+
+async function getUserByUsername(username: string, returnPassword: boolean) {
+  return await DB.select({
+    id: user.id,
+    username: user.username,
+    password: returnPassword ? user.password : undefined,
+    created_at: user.created_at,
+    updated_at: user.updated_at,
+  })
+    .from(user)
+    .where(eq(user.username, username))
     .limit(1);
 }
 
@@ -60,7 +73,7 @@ async function updateUser(newUser: UpdateUserDto) {
     });
 }
 
-async function deleteUser(id: UpdateUserDto['id']) {
+async function deleteUser(id: number) {
   return await DB.delete(user).where(eq(user.id, id)).returning({
     id: user.id,
     username: user.username,
@@ -71,6 +84,7 @@ async function deleteUser(id: UpdateUserDto['id']) {
 export const usersService = {
   getUsers,
   getUserById,
+  getUserByUsername,
   createUser,
   updateUser,
   deleteUser,

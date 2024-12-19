@@ -4,7 +4,7 @@ import {
   updateUserSchema,
   CreateUserDto,
   UpdateUserDto,
-} from '@schemas/user.schema';
+} from '@mmschemas/user.schema';
 import { zValidator } from '@hono/zod-validator';
 import { idParamSchema } from '../utils/validation';
 import { usersService } from '../services/users';
