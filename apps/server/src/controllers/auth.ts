@@ -9,6 +9,10 @@ auth.post('/login', async (c) => {
 
   try {
     const token = await authService.login(body);
+    c.json({
+      message: 'Ingreso realizado con éxito',
+      token,
+    });
   } catch (e: unknown) {
     const error = e as Error;
     c.json(

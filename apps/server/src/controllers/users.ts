@@ -8,8 +8,11 @@ import {
 import { zValidator } from '@hono/zod-validator';
 import { idParamSchema } from '../utils/validation';
 import { usersService } from '../services/users';
+import { jwtAuth } from '../middlewares/jwt';
 
 export const users = new Hono();
+
+users.use(jwtAuth);
 
 users.get('/', async (c) => {
   const usersList = await usersService.getUsers();
