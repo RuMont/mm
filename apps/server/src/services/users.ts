@@ -28,11 +28,11 @@ async function getUserById(id: number) {
     .limit(1);
 }
 
-async function getUserByUsername(username: string, returnPassword: boolean) {
+async function getUserByUsername(username: string) {
   return await DB.select({
     id: user.id,
     username: user.username,
-    password: returnPassword ? user.password : undefined,
+    password: user.password,
     created_at: user.created_at,
     updated_at: user.updated_at,
   })

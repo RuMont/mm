@@ -4,11 +4,14 @@ import { Navbar } from '../components/navbar/navbar';
 import { Sidebar } from '../components/sidebar/sidebar';
 import { RouterOutlet } from '@angular/router';
 import { UiService } from '../services/UiService';
+import { NgxSonnerToaster } from 'ngx-sonner';
+import { ToastOptions } from '../ToastOptions';
 
 @Component({
-  imports: [RouterOutlet, Loader, Navbar, Sidebar],
+  imports: [RouterOutlet, Loader, Navbar, Sidebar, NgxSonnerToaster],
   template: `
     <mm-loader />
+    <ngx-sonner-toaster position="top-right" [toastOptions]="ToastOptions" />
     <div class="grid grid-cols-1 md:grid-cols-[auto,1fr] h-[100dvh] text-black">
       <mm-sidebar
         (mouseenter)="uiService.toggleSidebar(true)"
@@ -30,4 +33,5 @@ import { UiService } from '../services/UiService';
 })
 export class AppLayout {
   protected uiService = inject(UiService);
+  protected ToastOptions = ToastOptions;
 }

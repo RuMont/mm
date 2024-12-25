@@ -1,5 +1,5 @@
 import { Injectable, signal } from '@angular/core';
-import { FileChartColumn, Users } from 'lucide-angular';
+import { IdCard } from 'lucide-angular';
 
 @Injectable({
   providedIn: 'root',
@@ -15,14 +15,9 @@ export class UiService {
 
   menu = [
     {
-      label: 'Users',
-      path: '/users',
-      icon: Users,
-    },
-    {
-      label: 'Reports',
-      path: '/reports',
-      icon: FileChartColumn,
+      label: 'Clientes',
+      path: '/clients',
+      icon: IdCard,
     },
   ];
 

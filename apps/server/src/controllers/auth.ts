@@ -1,15 +1,24 @@
 import { Hono } from 'hono';
 import { HTTPException } from 'hono/http-exception';
-import { type AuthCredentials } from '@mmtypes/AuthCredentials';
+import { type ServerVariables } from '@mmtypes/server/ServerVariables';
 import { authService } from '../services/auth';
+import { jwtAuth } from '../middlewares/jwt';
+import { z } from 'zod';
 
-export const auth = new Hono();
+export const auth = new Hono<{ Variables: ServerVariables }>();
 
 auth.post('/login', async (c) => {
-  const body = await c.req.json<AuthCredentials>();
+  const body = await c.get('body');
 
   try {
-    const token = await authService.login(body);
+    const credentials = z
+      .object({
+        username: z.string().min(1, 'Username is required'),
+        password: z.string().min(1, 'Password is required'),
+      })
+      .parse(body);
+
+    const token = await authService.login(credentials);
     return c.json({
       message: 'Ingreso realizado con éxito',
       token,
@@ -30,4 +39,26 @@ auth.post('/login', async (c) => {
       ),
     });
   }
+});
+
+auth.get('/logout', jwtAuth, async (c) => {
+  const token = c.get('user');
+  await authService.revokeToken(token.id);
+  return c.json({
+    message: 'Sesión terminada',
+  });
+});
+
+auth.get('/checktokenvalidity', async (c) => {
+  const authHeader = c.req.header('Authorization');
+  console.log('tiene header');
+  if (!authHeader) return c.json({ valid: false });
+
+  const token = authHeader.split(' ')[1];
+  console.log('tiene token');
+  if (!token) return c.json({ valid: false });
+
+  const isTokenValid = await authService.checkTokenValidity(token);
+  console.log('es valido?', isTokenValid);
+  return c.json({ valid: isTokenValid });
 });

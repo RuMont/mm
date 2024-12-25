@@ -13,11 +13,11 @@ export const offlineInterceptor: HttpInterceptorFn = (req, next) => {
         uiService.appStatus.set('online');
       }
     }),
-    catchError((httpErrorResponse: HttpErrorResponse) => {
-      if (httpErrorResponse.status === 0) {
+    catchError((error: HttpErrorResponse) => {
+      if (error.status === 0) {
         uiService.appStatus.set('offline');
       }
-      return throwError(() => httpErrorResponse);
+      return throwError(() => error);
     })
   );
 };

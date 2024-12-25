@@ -9,8 +9,9 @@ import { zValidator } from '@hono/zod-validator';
 import { idParamSchema } from '../utils/validation';
 import { usersService } from '../services/users';
 import { jwtAuth } from '../middlewares/jwt';
+import { ServerVariables } from '@mmtypes/server/ServerVariables';
 
-export const users = new Hono();
+export const users = new Hono<{ Variables: ServerVariables }>();
 
 users.use(jwtAuth);
 
@@ -33,7 +34,7 @@ users.get('/:id', zValidator('param', idParamSchema), async (c) => {
 });
 
 users.post('/', zValidator('json', insertUserSchema), async (c) => {
-  const body = await c.req.json<CreateUserDto>();
+  const body = await c.get('body') as CreateUserDto;
 
   const [newUser] = await usersService.createUser(body);
 
@@ -46,7 +47,7 @@ users.put(
   zValidator('json', updateUserSchema),
   async (c) => {
     const id = Number(c.req.param('id'));
-    const body = await c.req.json<UpdateUserDto>();
+    const body = await c.get('body') as UpdateUserDto;
 
     const [updatedUser] = await usersService.updateUser(body);
 

@@ -1,10 +1,17 @@
 import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
-import { LogOut, LucideAngularModule, Menu, Settings, User } from 'lucide-angular';
+import {
+  LogOut,
+  LucideAngularModule,
+  Menu,
+  Settings,
+  User,
+} from 'lucide-angular';
 import { OverlayModule } from '@angular/cdk/overlay';
 import { A11yModule } from '@angular/cdk/a11y';
-import { RouterLink } from '@angular/router';
+import { Router, RouterLink } from '@angular/router';
 import { UiService } from '../../services/UiService';
 import { AuthService } from '../../services/AuthService';
+import { delay } from 'rxjs';
 
 @Component({
   selector: 'mm-navbar',
@@ -15,6 +22,7 @@ import { AuthService } from '../../services/AuthService';
 export class Navbar {
   protected uiService = inject(UiService);
   private authService = inject(AuthService);
+  private router = inject(Router);
   protected Menu = Menu;
   protected User = User;
   protected LogOut = LogOut;
@@ -22,6 +30,12 @@ export class Navbar {
 
   logout() {
     this.uiService.toggleLoader(true);
-    this.authService.logout();
+    this.authService
+      .logout()
+      .pipe(delay(200))
+      .subscribe((res) => {
+        this.router.navigateByUrl('');
+        this.uiService.toggleUserDropdown(false);
+      });
   }
 }

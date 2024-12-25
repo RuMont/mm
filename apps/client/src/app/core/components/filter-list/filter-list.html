@@ -1,0 +1,38 @@
+<div id="header" class="flex gap-2 w-full">
+  <div id="filter" class="flex justify-between gap-2 w-full">
+    <div class="flex justify-between gap-2 w-full md:max-w-md">
+      <div class="bg-white rounded shadow grid grid-cols-[auto,1fr] w-full">
+        <button
+          class="flex gap-2 items-center px-6 py-2 border-r hover:bg-slate-50"
+        >
+          <p class="hidden md:block">Filtro</p>
+          <lucide-icon class="hidden md:block" [img]="ChevronDown" size="16" />
+          <lucide-icon
+            class="block md:hidden"
+            [img]="SlidersHorizontal"
+            size="16"
+          />
+        </button>
+        <input
+          class="px-6 py-2 min-w-12 rounded-r"
+          (change)="setSearch($event)"
+          type="text"
+          [value]="search()"
+          placeholder="Buscar..."
+        />
+      </div>
+      <button class="text-sm text-slate-600" (click)="reset()">Reset</button>
+    </div>
+    <div class="flex gap-2 items-center">
+      <ng-content />
+    </div>
+  </div>
+</div>
+
+<ul id="content">
+  <li>
+    @for (column of columns(); track column.key) {
+    <div [attr.data-column]="column.key">{{column.label}}</div>
+    }
+  </li>
+</ul>

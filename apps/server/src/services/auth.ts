@@ -9,10 +9,7 @@ import { access } from '@mmschemas/access.schema';
 import { and, eq } from 'drizzle-orm';
 
 async function login(credentials: AuthCredentials): Promise<TokenOrFail> {
-  const [user] = await usersService.getUserByUsername(
-    credentials.username,
-    true
-  );
+  const [user] = await usersService.getUserByUsername(credentials.username);
   if (!user) throw new Error('Credenciales no válidas');
 
   const isPasswordValid = await comparePassword(
@@ -56,7 +53,18 @@ async function revokeToken(userId: number) {
     .where(and(eq(access.userId, userId), eq(access.revoked, 0)));
 }
 
+async function checkTokenValidity(token: string) {
+  const [entry] = await DB.select()
+    .from(access)
+    .where(eq(access.token, token))
+    .limit(1);
+  if (entry.revoked) return false;
+  if (Date.now() > entry.expiresAt) return false;
+  return true;
+}
+
 export const authService = {
   login,
   revokeToken,
+  checkTokenValidity,
 };

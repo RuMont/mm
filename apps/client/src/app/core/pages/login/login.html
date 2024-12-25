@@ -1,72 +1,66 @@
-<ngx-sonner-toaster
-  position="top-right"
-  [toastOptions]="{
-    unstyled: true,
-    classes: {
-      error: 'bg-red-700 flex items-center gap-2 p-3 rounded shadow-lg w-full text-sm',
-      success: 'text-green-700 flex items-center gap-2 p-3 rounded shadow-lg w-full text-sm',
-      warning: 'text-yellow-700 flex items-center gap-2 p-3 rounded shadow-lg w-full text-sm',
-      info: 'bg-blue-700 flex items-center gap-2 p-3 rounded shadow-lg w-full text-sm',
-    }
-}"
-/>
-<form
-  [formGroup]="form"
+<div
   class="bg-gray-800 text-white rounded-lg shadow-lg overflow-hidden mx-4 border border-gray-600"
-  (ngSubmit)="submit()"
 >
-  <div class="p-10">
-    <p class="text-3xl font-bold mb-3 text-center">Ingreso</p>
-    <div class="w-24 h-0.5 bg-emerald-400 mb-4 mx-auto"></div>
-    <div class="flex flex-col gap-4">
-      <div class="flex flex-col gap-2">
-        <label for="username"> Nombre de usuario </label>
-        <input
-          id="username"
-          class="bg-gray-800 border border-gray-600 px-4 py-2 rounded focus:ring focus:ring-emerald-600 outline-none transition-all placeholder:text-gray-500"
-          [class.border-red-700]="isFieldInvalid(form, 'username') && submitted"
-          type="text"
-          name="username"
-          placeholder="Escribe tu nombre de usuario"
-          formControlName="username"
-          required
-        />
-        @if (isFieldInvalid(form, 'username') && submitted) { @let
-        usernameErrors = getFieldErrors(form, 'username');
-        <div>
-          @if (usernameErrors?.['required']) {
-          <p class="text-red-700 text-sm">Nombre de usuario requerido</p>
-          }
-        </div>
-        }
-      </div>
-      <div class="flex flex-col gap-2">
-        <label for="password"> Contraseña </label>
-        <input
-          id="password"
-          class="bg-gray-800 border border-gray-600 px-4 py-2 rounded focus:ring focus:ring-emerald-600 outline-none transition-all"
-          [class.border-red-700]="isFieldInvalid(form, 'password') && submitted"
-          type="password"
-          name="password"
-          formControlName="password"
-          required
-        />
-        @if (isFieldInvalid(form, 'password') && submitted) { @let
-        passwordErrors = getFieldErrors(form, 'password');
-        <div>
-          @if (passwordErrors?.['required']) {
-          <p class="text-red-700 text-sm">Contraseña requerida</p>
-          }
-        </div>
-        }
-      </div>
+  @if (checkingToken()) {
+    <div class="p-10 py-[11.782rem] grid place-items-center">
+      <mm-loading-spinner color="#10b981" />
     </div>
-  </div>
-  <div class="px-10 py-8 bg-gray-700 flex flex-row-reverse">
-    <button
-      class="bg-emerald-700 hover:bg-emerald-600 text-white rounded px-6 py-2 font-bold w-full sm:w-auto"
-    >
-      Ingresar
-    </button>
-  </div>
-</form>
+  } @else {
+    <form [formGroup]="form" (ngSubmit)="submit()" class="animate-fadeIn">
+      <div class="p-10">
+        <p class="text-3xl font-bold mb-3 text-center">Ingreso</p>
+        <div class="w-24 h-0.5 bg-emerald-400 mb-4 mx-auto"></div>
+        <div class="flex flex-col gap-4">
+          <div class="flex flex-col gap-2">
+            <label for="username"> Nombre de usuario </label>
+            <input
+              id="username"
+              class="bg-gray-800 border border-gray-600 px-4 py-2 rounded focus:ring focus:ring-emerald-600 outline-none transition-all placeholder:text-gray-500"
+              [class.border-red-700]="isFieldInvalid(form, 'username') && submitted"
+              type="text"
+              name="username"
+              placeholder="Escribe tu nombre de usuario"
+              formControlName="username"
+              required
+            />
+            @if (isFieldInvalid(form, 'username') && submitted) { @let
+            usernameErrors = getFieldErrors(form, 'username');
+            <div>
+              @if (usernameErrors?.['required']) {
+              <p class="text-red-700 text-sm">Nombre de usuario requerido</p>
+              }
+            </div>
+            }
+          </div>
+          <div class="flex flex-col gap-2">
+            <label for="password"> Contraseña </label>
+            <input
+              id="password"
+              class="bg-gray-800 border border-gray-600 px-4 py-2 rounded focus:ring focus:ring-emerald-600 outline-none transition-all"
+              [class.border-red-700]="isFieldInvalid(form, 'password') && submitted"
+              type="password"
+              name="password"
+              formControlName="password"
+              required
+            />
+            @if (isFieldInvalid(form, 'password') && submitted) { @let
+            passwordErrors = getFieldErrors(form, 'password');
+            <div>
+              @if (passwordErrors?.['required']) {
+              <p class="text-red-700 text-sm">Contraseña requerida</p>
+              }
+            </div>
+            }
+          </div>
+        </div>
+      </div>
+      <div class="px-10 py-8 bg-gray-700 flex flex-row-reverse">
+        <button
+          class="bg-emerald-700 hover:bg-emerald-600 text-white rounded px-6 py-2 font-bold w-full sm:w-auto"
+        >
+          Ingresar
+        </button>
+      </div>
+    </form>
+  }
+</div>

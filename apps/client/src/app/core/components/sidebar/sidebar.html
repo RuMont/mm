@@ -9,7 +9,7 @@
     <lucide-icon [img]="X" />
   </button>
 </div>
-<div class="h-full max-h-full overflow-y-auto flex flex-col gap-2 p-3 bg-emerald-900" [class.p-4]="uiService.sidebarExpanded()">
+<div class="h-full max-h-full overflow-y-auto flex flex-col gap-2 p-3 bg-emerald-900">
   @for (item of uiService.menu; track $index) {
   <a
     [routerLink]="item.path"

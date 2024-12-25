@@ -2,6 +2,7 @@ import { Route } from '@angular/router';
 import { LoginPage } from './pages/login/login';
 import { LoginLayout } from './layouts/login-layout';
 import { AppLayout } from './layouts/app-layout';
+import { isUserLoggedGuard } from './guards/is-user-logged.guard';
 
 export const routes: Route[] = [
   {
@@ -17,15 +18,22 @@ export const routes: Route[] = [
   {
     path: '',
     component: AppLayout,
+    canMatch: [isUserLoggedGuard],
     children: [
       {
         path: 'dashboard',
-        loadComponent: () => import('../features/dashboard/dashboard').then((c) => c.DashboardPage),
+        loadComponent: () =>
+          import('../features/dashboard/dashboard').then(
+            ({ DashboardPage }) => DashboardPage
+          ),
       },
-      // {
-      //   path: 'users',
-      //   loadChildren: () => import('../features/users/users.module').then((m) => m.UsersModule),
-      // },
+      {
+        path: 'clients',
+        loadChildren: () =>
+          import('../features/clients/clients.module').then(
+            ({ ClientsModule }) => ClientsModule
+          ),
+      },
     ],
   },
 ];
