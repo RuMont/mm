@@ -1,11 +1,13 @@
 import {
   client,
+  ClientDto,
   CreateClientDto,
   UpdateClientDto,
 } from '@mmschemas/client.schema';
 import DB from '../db/config';
 import { eq, sql } from 'drizzle-orm';
 import { GenericFilter } from '@mmtypes/GenericFilter';
+import { GenericFilterResponse } from '@mmtypes/GenericFilterResponse';
 
 async function getClients() {
   return await DB.select().from(client);
@@ -30,22 +32,51 @@ async function deleteClient(id: number) {
   return await DB.delete(client).where(eq(client.id, id)).returning();
 }
 
-async function searchClients(filter: GenericFilter) {
+async function searchClients(
+  filter: GenericFilter
+): Promise<GenericFilterResponse<ClientDto[]>> {
   const offset = ((filter.page ?? 1) - 1) * (filter.itemsPerPage ?? 10);
 
-  let query = `select ${filter.fields ? filter.fields.join(', ') : '*'} from client where 1 = 1`;
+  let query = `select ${
+    filter.fields ? filter.fields.join(', ') : '*'
+  } from client where 1 = 1`;
 
   if (filter.searchTerm) {
     query += ` and name like '%${filter.searchTerm}%'`;
   }
 
-  if (filter.orderBy?.field && filter.orderBy?.direction) {
-    query += ` order by ${filter.orderBy.field} ${filter.orderBy.direction}`;
+  if (filter.orderByField || filter.orderByDirection) {
+    query += ` order by`;
+    if (filter.orderByField) {
+      query += ` ${filter.orderByField}`;
+    }
+    if (filter.orderByDirection) {
+      query += ` ${filter.orderByDirection}`;
+    }
   }
 
-  query += ` limit ${(filter.itemsPerPage ?? 10)} offset ${offset}`;
+  query += ` limit ${filter.itemsPerPage ?? 10} offset ${offset}`;
 
-  return sql`${query}`;
+  const totalQuery = `select count(*) as total from client`;
+
+  try {
+    const filteredData = DB.get<Partial<ClientDto>[]>(sql`${sql.raw(query)}`);
+    const totalResult = DB.get<{ total: number }[]>(
+      sql`${sql.raw(totalQuery)}`
+    );
+
+    const totalElements = totalResult[0].total;
+
+    return {
+      data: filteredData,
+      page: filter.page ?? 1,
+      itemsPerPage: filter.itemsPerPage ?? 10,
+      totalElements,
+    };
+  } catch (error) {
+    console.error('Error executing searchClients query:', error);
+    throw new Error('Failed to fetch clients');
+  }
 }
 
 export const clientsService = {

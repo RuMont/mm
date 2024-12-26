@@ -4,8 +4,7 @@ import { z } from 'zod';
 import { id, timestamps } from './columns.helpers';
 import { relations } from 'drizzle-orm';
 import { access } from './access.schema';
-import { CreateDto, UpdateDto } from '@mmtypes/server/DtoFactory'
-
+import { CreateDto, UpdateDto } from '@mmtypes/server/DtoFactory';
 
 export const user = sqliteTable('users', {
   ...id,
@@ -24,5 +23,6 @@ export const insertUserSchema = createInsertSchema(user, {
 });
 export const updateUserSchema = insertUserSchema.partial();
 
-export type CreateUserDto = CreateDto<typeof user>
-export type UpdateUserDto = UpdateDto<typeof user>
+export type CreateUserDto = CreateDto<typeof user>;
+export type UpdateUserDto = UpdateDto<typeof user>;
+export type UserDto = UpdateUserDto;

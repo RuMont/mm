@@ -1,10 +1,9 @@
-export type ListConfig<T extends Record<string, any>> = {
+export type ListConfig = {
   columns: {
-    key: keyof T;
+    key: string;
     label: string;
     sortable: boolean;
   }[];
-  data: T[];
   page: number;
   itemsPerPage: number;
   totalElements: number;

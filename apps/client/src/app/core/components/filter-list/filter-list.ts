@@ -20,9 +20,9 @@ import { ListConfig } from './types';
   imports: [LucideAngularModule],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class FilterList<T extends Record<string, any>> {
+export class FilterList {
   public readonly search = model('');
-  public readonly config = input<ListConfig<T>>();
+  public readonly config = input<ListConfig>();
 
   protected readonly columns = computed(() => this.config()?.columns ?? []);
   protected readonly totalElements = computed(

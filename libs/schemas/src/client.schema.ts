@@ -19,3 +19,4 @@ export const updateClientSchema = createUpdateSchema(client);
 
 export type CreateClientDto = CreateDto<typeof client>
 export type UpdateClientDto = UpdateDto<typeof client>
+export type ClientDto = UpdateClientDto;
