@@ -29,10 +29,40 @@
   </div>
 </div>
 
-<ul id="content">
-  <li>
-    @for (column of columns(); track column.key) {
-    <div [attr.data-column]="column.key">{{column.label}}</div>
-    }
+@let _columns = columns();
+<ul id="content" class="mt-4 bg-white rounded shadow">
+  @if (_columns) {
+  <li
+    class="grid shadow"
+    [style]="'grid-template-columns: repeat('+_columns.length+',minmax(min(170px,100%),1fr))'"
+  >
+    @for (column of _columns; track column.key) { @if (column.sortable) {
+    <button
+      [attr.data-column]="column.key"
+      [attr.data-index]="$index"
+      [class]="'px-4 py-2 font-bold text-left ' + (!$last ? 'border-r' : '')"
+    >
+      {{column.label}}
+    </button>
+    } @else {
+    <p
+      [attr.data-column]="column.key"
+      [attr.data-index]="$index"
+      [class]="'px-4 py-2 font-bold ' + (!$last ? 'border-r' : '')"
+    >
+      {{column.label}}
+    </p>
+    } }
   </li>
+  @for(row of data(); track $index) {
+  <li
+    [style]="'grid-template-columns: repeat('+_columns.length+',minmax(min(170px,100%),1fr))'"
+  >
+    <p></p>
+  </li>
+  } @empty {
+  <li class="w-100 text-center py-1 text-sm font-semibold">
+    No hay resultados
+  </li>
+  } }
 </ul>

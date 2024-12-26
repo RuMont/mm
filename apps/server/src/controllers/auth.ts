@@ -35,7 +35,7 @@ auth.post('/login', async (c) => {
           headers: {
             'Content-Type': 'application/json',
           },
-        }
+        },
       ),
     });
   }
@@ -51,14 +51,11 @@ auth.get('/logout', jwtAuth, async (c) => {
 
 auth.get('/checktokenvalidity', async (c) => {
   const authHeader = c.req.header('Authorization');
-  console.log('tiene header');
   if (!authHeader) return c.json({ valid: false });
 
   const token = authHeader.split(' ')[1];
-  console.log('tiene token');
   if (!token) return c.json({ valid: false });
 
   const isTokenValid = await authService.checkTokenValidity(token);
-  console.log('es valido?', isTokenValid);
   return c.json({ valid: isTokenValid });
 });

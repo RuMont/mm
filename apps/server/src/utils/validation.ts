@@ -8,9 +8,9 @@ export const idParamSchema = z.object({
 
 export const searchClientsSchema = z.object({
   searchTerm: z.string().optional(),
-  fields: z.array(z.string()).optional(),
+  fields: z.array(z.any()).optional(),
   orderByField: z.string().optional(),
   orderByDirection: z.enum(['asc', 'desc']).optional(),
-  page: z.number().min(1).default(1),
-  itemsPerPage: z.number().min(1).default(10),
+  page: z.string().default("1").transform(Number),
+  itemsPerPage: z.string().default("10").transform(Number),
 });

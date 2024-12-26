@@ -12,7 +12,8 @@ import {
   LucideAngularModule,
   SlidersHorizontal,
 } from 'lucide-angular';
-import { ListConfig } from './types';
+import { Columns, ListConfig } from './types';
+import { GenericFilterResponse } from '@mmtypes/GenericFilterResponse';
 
 @Component({
   selector: 'mm-filter-list',
@@ -20,14 +21,16 @@ import { ListConfig } from './types';
   imports: [LucideAngularModule],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class FilterList {
+export class FilterList<T> {
   public readonly search = model('');
-  public readonly config = input<ListConfig>();
+  public readonly config = input<GenericFilterResponse>();
 
-  protected readonly columns = computed(() => this.config()?.columns ?? []);
+  public readonly columns = input<Columns<T>>();
+
   protected readonly totalElements = computed(
     () => this.config()?.totalElements ?? 10
   );
+  protected readonly data = computed(() => this.config()?.data);
   protected readonly page = linkedSignal(() => this.config()?.page ?? 1);
   protected readonly itemsPerPage = linkedSignal(
     () => this.config()?.itemsPerPage ?? 10
@@ -54,5 +57,12 @@ export class FilterList {
   reset() {
     this.search.set('');
     this.page.set(1);
+  }
+
+  assertIsArray(value: unknown): value is Array<T> {
+    if (!Array.isArray(value)) {
+      return false;
+    }
+    return true;
   }
 }

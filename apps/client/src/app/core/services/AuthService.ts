@@ -12,24 +12,17 @@ export class AuthService {
   private http = inject(HttpClient);
 
   login(credentials: AuthCredentials) {
-    return this.http
-      .post<GenericResponse<{ token: string }>>(
-        `${environment.apiUrl}/auth/login`,
-        credentials
-      )
-      .pipe(
-        tap((res) => {
-          if ('token' in res) {
-            localStorage.setItem('token', res.token);
-          }
-        })
-      );
+    return this.http.post<GenericResponse<{ token: string }>>(`${environment.apiUrl}/auth/login`, credentials).pipe(
+      tap((res) => {
+        if ('token' in res) {
+          localStorage.setItem('token', res.token);
+        }
+      }),
+    );
   }
 
   checkTokenValidity() {
-    return this.http.get<{ valid: boolean }>(
-      `${environment.apiUrl}/auth/checktokenvalidity`
-    );
+    return this.http.get<{ valid: boolean }>(`${environment.apiUrl}/auth/checktokenvalidity`);
   }
 
   logout() {

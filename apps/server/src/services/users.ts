@@ -1,8 +1,4 @@
-import {
-  type CreateUserDto,
-  type UpdateUserDto,
-  user,
-} from '@mmschemas/user.schema';
+import { type CreateUserDto, type UpdateUserDto, user } from '@mmschemas/user.schema';
 import DB from '../db/config';
 import { eq } from 'drizzle-orm';
 import { hashPassword } from '../utils/password';
@@ -63,14 +59,11 @@ async function updateUser(newUser: UpdateUserDto) {
     updatedData.password = await hashPassword(newUser.password);
   }
 
-  return await DB.update(user)
-    .set(updatedData)
-    .where(eq(user.id, newUser.id))
-    .returning({
-      id: user.id,
-      username: user.username,
-      updated_at: user.updated_at,
-    });
+  return await DB.update(user).set(updatedData).where(eq(user.id, newUser.id)).returning({
+    id: user.id,
+    username: user.username,
+    updated_at: user.updated_at,
+  });
 }
 
 async function deleteUser(id: number) {

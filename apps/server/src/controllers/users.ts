@@ -1,10 +1,5 @@
 import { Hono } from 'hono';
-import {
-  insertUserSchema,
-  updateUserSchema,
-  CreateUserDto,
-  UpdateUserDto,
-} from '@mmschemas/user.schema';
+import { insertUserSchema, updateUserSchema, CreateUserDto, UpdateUserDto } from '@mmschemas/user.schema';
 import { zValidator } from '@hono/zod-validator';
 import { idParamSchema } from '../utils/validation';
 import { usersService } from '../services/users';
@@ -34,33 +29,25 @@ users.get('/:id', zValidator('param', idParamSchema), async (c) => {
 });
 
 users.post('/', zValidator('json', insertUserSchema), async (c) => {
-  const body = await c.get('body') as CreateUserDto;
+  const body = (await c.get('body')) as CreateUserDto;
 
   const [newUser] = await usersService.createUser(body);
 
   return c.json({ message: 'Usuario creado con éxito', user: newUser }, 201);
 });
 
-users.put(
-  '/:id',
-  zValidator('param', idParamSchema),
-  zValidator('json', updateUserSchema),
-  async (c) => {
-    const id = Number(c.req.param('id'));
-    const body = await c.get('body') as UpdateUserDto;
+users.put('/:id', zValidator('param', idParamSchema), zValidator('json', updateUserSchema), async (c) => {
+  const id = Number(c.req.param('id'));
+  const body = (await c.get('body')) as UpdateUserDto;
 
-    const [updatedUser] = await usersService.updateUser(body);
+  const [updatedUser] = await usersService.updateUser(body);
 
-    if (!updatedUser) {
-      return c.json(
-        { error: `Usuario con id ${id} no encontrado o no actualizado` },
-        404
-      );
-    }
-
-    return c.json({ message: 'Usuario actualizado con éxito', user: updatedUser });
+  if (!updatedUser) {
+    return c.json({ error: `Usuario con id ${id} no encontrado o no actualizado` }, 404);
   }
-);
+
+  return c.json({ message: 'Usuario actualizado con éxito', user: updatedUser });
+});
 
 users.delete('/:id', zValidator('param', idParamSchema), async (c) => {
   const id = Number(c.req.param('id'));

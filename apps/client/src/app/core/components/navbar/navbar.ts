@@ -1,11 +1,5 @@
 import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
-import {
-  LogOut,
-  LucideAngularModule,
-  Menu,
-  Settings,
-  User,
-} from 'lucide-angular';
+import { LogOut, LucideAngularModule, Menu, Settings, User } from 'lucide-angular';
 import { OverlayModule } from '@angular/cdk/overlay';
 import { A11yModule } from '@angular/cdk/a11y';
 import { Router, RouterLink } from '@angular/router';

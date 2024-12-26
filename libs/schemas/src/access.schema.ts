@@ -4,7 +4,9 @@ import { user } from './user.schema';
 
 export const access = sqliteTable('accesses', {
   ...id,
-  userId: integer('user_id').references(() => user.id, {onDelete: 'cascade'}).notNull(),
+  userId: integer('user_id')
+    .references(() => user.id, { onDelete: 'cascade' })
+    .notNull(),
   token: text('token').notNull(),
   /** date in milliseconds */
   expiresAt: integer('expires_at').notNull(),

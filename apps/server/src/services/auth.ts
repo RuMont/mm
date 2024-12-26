@@ -12,23 +12,16 @@ async function login(credentials: AuthCredentials): Promise<TokenOrFail> {
   const [user] = await usersService.getUserByUsername(credentials.username);
   if (!user) throw new Error('Credenciales no válidas');
 
-  const isPasswordValid = await comparePassword(
-    credentials.password,
-    user.password
-  );
+  const isPasswordValid = await comparePassword(credentials.password, user.password);
   if (!isPasswordValid) {
     throw new Error('Credenciales no válidas');
   }
 
   const FOUR_HOURS = 14400;
 
-  const token = jwt.sign(
-    { id: user.id, username: user.username },
-    CONFIG.SECRET,
-    {
-      expiresIn: FOUR_HOURS,
-    }
-  );
+  const token = jwt.sign({ id: user.id, username: user.username }, CONFIG.SECRET, {
+    expiresIn: FOUR_HOURS,
+  });
 
   await createAccess(user.id, token, FOUR_HOURS);
   return token;
@@ -54,10 +47,7 @@ async function revokeToken(userId: number) {
 }
 
 async function checkTokenValidity(token: string) {
-  const [entry] = await DB.select()
-    .from(access)
-    .where(eq(access.token, token))
-    .limit(1);
+  const [entry] = await DB.select().from(access).where(eq(access.token, token)).limit(1);
   if (entry.revoked) return false;
   if (Date.now() > entry.expiresAt) return false;
   return true;

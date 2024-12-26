@@ -50,7 +50,6 @@ export class LoginPage implements OnInit {
       delay(500)
     ).subscribe((res) => {
       this.checkingToken.set(false);
-      console.log(res);
       if (!res.valid) {
         localStorage.removeItem('token');
         return;

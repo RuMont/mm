@@ -5,7 +5,7 @@ import { UiService } from '../services/UiService';
   selector: 'mm-loader',
   template: `
     @if (uiService.loading()) {
-      <div class="min-w-[35vw] bg-emerald-400 fixed h-1 shadow shadow-primary-light animate-loading"></div>
+    <div class="min-w-[35vw] bg-emerald-400 fixed h-1 shadow shadow-primary-light animate-loading"></div>
     }
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,

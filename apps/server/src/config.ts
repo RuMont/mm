@@ -3,11 +3,7 @@ import { z } from 'zod';
 
 loadEnvFile('./.env');
 
-const {
-  PORT = 3000,
-  DB_PATH = 'apps/server/src/db/db.sqlite',
-  SECRET = 'dev',
-} = process.env;
+const { PORT = 3000, DB_PATH = 'apps/server/src/db/db.sqlite', SECRET = 'dev' } = process.env;
 
 const ConfigSchema = z.object({
   PORT: z.preprocess((value) => Number(value), z.number().int().positive()),
@@ -21,7 +17,7 @@ export const CONFIG = new Proxy(
       PORT,
       DB_PATH,
       SECRET,
-    })
+    }),
   ),
   {
     set(t, k) {
@@ -30,5 +26,5 @@ export const CONFIG = new Proxy(
     deleteProperty(t, k) {
       throw new Error(`Cannot delete readonly CONFIG property: ${String(k)}`);
     },
-  }
+  },
 );

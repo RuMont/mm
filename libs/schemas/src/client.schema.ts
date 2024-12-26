@@ -17,6 +17,6 @@ export const client = sqliteTable('client', {
 export const insertClientSchema = createInsertSchema(client);
 export const updateClientSchema = createUpdateSchema(client);
 
-export type CreateClientDto = CreateDto<typeof client>
-export type UpdateClientDto = UpdateDto<typeof client>
+export type CreateClientDto = CreateDto<typeof client>;
+export type UpdateClientDto = UpdateDto<typeof client>;
 export type ClientDto = UpdateClientDto;
