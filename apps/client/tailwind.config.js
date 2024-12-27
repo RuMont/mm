@@ -22,6 +22,7 @@ module.exports = {
       animation: {
         loading: 'slideRight 1s linear infinite',
         fadeIn: 'fadeIn 1s ease-in-out',
+        fastFadeIn: 'fadeIn 0.2s ease-in-out',
       },
       transitionProperty: {
         height: 'height',

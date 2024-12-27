@@ -9,8 +9,8 @@ export const client = sqliteTable('client', {
   email: text('email'),
   phone: text('phone'),
   address: text('address'),
-  active: integer('is_active').default(0),
-  birthDate: text('birth_date'),
+  active: integer('active').default(0),
+  birthDate: text('birthDate'),
   ...timestamps,
 });
 

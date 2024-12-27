@@ -6,7 +6,9 @@ export type ListConfig<T> = {
 };
 
 export type Columns<T> = {
-  key: keyof T;
+  key: T extends (infer U)[]
+    ? keyof U
+    : keyof T;
   label: string;
   sortable?: boolean;
 }[];

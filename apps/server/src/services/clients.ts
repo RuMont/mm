@@ -49,8 +49,10 @@ async function searchClients(filter: GenericFilter<ClientDto>): Promise<GenericF
     const totalResult = DB.get<{ total: number }>(sql`${sql.raw(totalQuery)}`);
     const totalElements = totalResult.total;
 
+    const data = filteredData !== undefined ? (Array.isArray(filteredData) ? filteredData : [filteredData]) : [];
+
     return {
-      data: filteredData ?? [],
+      data,
       page: filter.page ?? 1,
       itemsPerPage: filter.itemsPerPage ?? 10,
       totalElements,

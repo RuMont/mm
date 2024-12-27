@@ -1,4 +1,4 @@
-import { Component, computed, input } from '@angular/core';
+import { ChangeDetectionStrategy, Component, computed, input } from '@angular/core';
 
 @Component({
   selector: 'mm-loading-spinner',
@@ -64,6 +64,7 @@ import { Component, computed, input } from '@angular/core';
         }
       }
   `,
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class LoadingSpinner {
   size = input<string>('37px');

@@ -2,16 +2,10 @@
   <div id="filter" class="flex justify-between gap-2 w-full">
     <div class="flex justify-between gap-2 w-full md:max-w-md">
       <div class="bg-white rounded shadow grid grid-cols-[auto,1fr] w-full">
-        <button
-          class="flex gap-2 items-center px-6 py-2 border-r hover:bg-slate-50"
-        >
+        <button class="flex gap-2 items-center px-6 py-2 border-r hover:bg-slate-50">
           <p class="hidden md:block">Filtro</p>
           <lucide-icon class="hidden md:block" [img]="ChevronDown" size="16" />
-          <lucide-icon
-            class="block md:hidden"
-            [img]="SlidersHorizontal"
-            size="16"
-          />
+          <lucide-icon class="block md:hidden" [img]="SlidersHorizontal" size="16" />
         </button>
         <input
           class="px-6 py-2 min-w-12 rounded-r"
@@ -32,10 +26,7 @@
 @let _columns = columns();
 <ul id="content" class="mt-4 bg-white rounded shadow">
   @if (_columns) {
-  <li
-    class="grid shadow"
-    [style]="'grid-template-columns: repeat('+_columns.length+',minmax(min(170px,100%),1fr))'"
-  >
+  <li class="grid shadow" [style]="'grid-template-columns: repeat('+_columns.length+',minmax(min(170px,100%),1fr))'">
     @for (column of _columns; track column.key) { @if (column.sortable) {
     <button
       [attr.data-column]="column.key"
@@ -54,15 +45,20 @@
     </p>
     } }
   </li>
-  @for(row of data(); track $index) {
+  @for(row of iterableData(); track $index) {
   <li
+    cdkListbox
+    cdkListboxMultiple
+    cdkListboxUseActiveDescendant
+    (cdkListboxValueChange)="rowClicked.emit($any(data()?.[$index]))"
+    class="grid hover:bg-emerald-50 cursor-pointer"
     [style]="'grid-template-columns: repeat('+_columns.length+',minmax(min(170px,100%),1fr))'"
   >
-    <p></p>
+    @for (cell of row; track $index) {
+    <p [cdkOption]="cell" [attr.data-index]="$index" [class]="'px-4 py-2 ' + (!$last ? 'border-r' : '')">{{cell}}</p>
+    }
   </li>
   } @empty {
-  <li class="w-100 text-center py-1 text-sm font-semibold">
-    No hay resultados
-  </li>
+  <li class="w-100 text-center py-1 text-sm font-semibold">No hay resultados</li>
   } }
 </ul>
