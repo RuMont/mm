@@ -10,16 +10,15 @@ import { HttpErrorResponse } from '@angular/common/http';
 
 @Component({
   standalone: false,
-  templateUrl: './clientModal.html',
+  templateUrl: './createClientModal.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class ClientModal {
+export class CreateClientModal {
   private fb = inject(FormBuilder);
   private dialogRef = inject(DialogRef);
   private clientsService = inject(ClientsService);
 
   protected ToastOptions = ToastOptions;
-  protected client: UpdateClientDto | undefined = inject(DIALOG_DATA);
   protected form = this.fb.group({
     name: this.fb.nonNullable.control('', [Validators.required]),
     email: this.fb.control('', [Validators.email]),
@@ -29,22 +28,8 @@ export class ClientModal {
     birthDate: this.fb.control(''),
   });
 
-  protected readonly removeAttempted = signal(false);
-
-  constructor() {
-    if (this.client) {
-      const parsedClient = {
-        ...this.client,
-        active: !!this.client.active,
-        birthDate: this.client.birthDate?.split(' ')[0],
-      };
-      this.form.patchValue(parsedClient);
-    }
-  }
-
   close() {
     this.dialogRef.close();
-    this.removeAttempted.set(false);
   }
 
   submit() {
@@ -53,12 +38,7 @@ export class ClientModal {
       toast.error('Hay campos en el formulario con errores');
       return;
     }
-    const data = this.form.getRawValue();
-    if (this.client) {
-      this.edit(data);
-      return;
-    }
-    this.create(data);
+    this.create(this.form.getRawValue());
   }
 
   create(data: ReturnType<typeof this.form.getRawValue>) {
@@ -77,51 +57,6 @@ export class ClientModal {
       .subscribe((res) => {
         this.dialogRef.close(res);
         if ('message' in res) toast.success(res.message);
-        this.removeAttempted.set(false);
-      });
-  }
-
-  edit(data: ReturnType<typeof this.form.getRawValue>) {
-    if (!this.client) return;
-    this.clientsService
-      .updateClient(this.client.id, {
-        ...data,
-        id: this.client.id,
-        active: Number(data.active),
-      })
-      .pipe(
-        take(1),
-        catchError((err: HttpErrorResponse) => {
-          toast.error(err.error);
-          return EMPTY;
-        }),
-      )
-      .subscribe((res) => {
-        this.dialogRef.close(res);
-        if ('message' in res) toast.success(res.message);
-        this.removeAttempted.set(false);
-      });
-  }
-
-  remove() {
-    if (!this.client) return;
-    if (!this.removeAttempted()) {
-      this.removeAttempted.set(true);
-      return;
-    }
-    this.clientsService
-      .deleteClient(this.client.id)
-      .pipe(
-        take(1),
-        catchError((err: HttpErrorResponse) => {
-          toast.error(err.error);
-          return EMPTY;
-        }),
-      )
-      .subscribe((res) => {
-        this.dialogRef.close(res);
-        if ('message' in res) toast.success(res.message);
-        this.removeAttempted.set(false);
       });
   }
 }

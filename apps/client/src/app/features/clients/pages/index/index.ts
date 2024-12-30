@@ -1,12 +1,13 @@
 import { ChangeDetectionStrategy, Component, inject, signal } from '@angular/core';
-import { ClientsService } from '../services/ClientsService';
+import { ClientsService } from '../../services/ClientsService';
 import { ClientDto } from '@mmschemas/client.schema';
-import { Columns } from '../../../core/components/filter-list/types';
+import { Columns } from '../../../../core/components/filter-list/types';
 import { Dialog } from '@angular/cdk/dialog';
-import { ClientModal } from '../components/clientModal/clientModal';
+import { CreateClientModal } from '../../components/createClientModal/createClientModal';
 import { filter, switchMap } from 'rxjs';
 import { toObservable } from '@angular/core/rxjs-interop';
 import { GenericFilter } from '@mmtypes/GenericFilter';
+import { ActivatedRoute, Router } from '@angular/router';
 
 @Component({
   templateUrl: './index.html',
@@ -16,6 +17,8 @@ import { GenericFilter } from '@mmtypes/GenericFilter';
 export class ClientsIndexPage {
   private clientsService = inject(ClientsService);
   private dialog = inject(Dialog);
+  private router = inject(Router);
+  private route = inject(ActivatedRoute);
 
   filter = signal<GenericFilter<ClientDto>>({
     itemsPerPage: 10,
@@ -27,7 +30,7 @@ export class ClientsIndexPage {
   source$ = toObservable(this.filter).pipe(switchMap((filter) => this.clientsService.searchClients(filter)));
 
   constructor() {
-    this.changeFilter(this.filter())
+    this.changeFilter(this.filter());
   }
 
   columns: Columns<ClientDto> = [
@@ -41,17 +44,24 @@ export class ClientsIndexPage {
     },
   ];
 
-  openClientModal(client?: ClientDto) {
-    console.log(client);
+  openCreateClientModal() {
     this.dialog
-      .open(ClientModal, {
-        data: client,
-      })
+      .open(CreateClientModal)
       .closed.pipe(filter(Boolean))
       .subscribe(() => this.changeFilter(this.filter()));
   }
 
   changeFilter(filter: GenericFilter<ClientDto>) {
-    this.filter.set({...filter});
+    this.filter.set({ ...filter });
+  }
+
+  goToClientDetails(client: ClientDto) {
+    console.log(`details/${client.id}`);
+    this.router.navigate(['details', client.id], {
+      state: {
+        client
+      },
+      relativeTo: this.route
+    })
   }
 }

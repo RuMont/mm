@@ -1,0 +1,88 @@
+<a routerLink="/clients" class="bg-white hover:bg-slate-100 border rounded shadow flex gap-2 px-3 py-1 w-fit mb-4">
+  <lucide-icon name="arrow-left" /> <span class="font-medium">Volver</span>
+</a>
+<div class="grid grid-cols-none grid-rows-2 md:grid-rows-none md:grid-cols-2 gap-12">
+  <form class="flex flex-col h-full border rounded bg-slate-50 overflow-hidden" [formGroup]="form" (ngSubmit)="submit()">
+    <div class="pt-4 px-4">
+      <h1 class="text-xl font-semibold antialiased">Editar cliente</h1>
+    </div>
+    <div class="px-4 pb-2 grow flex flex-col gap-4">
+      <p class="text-sm text-gray-400 font-medium">Edita o elimina este cliente</p>
+      <div class="flex flex-col gap-2">
+        <div class="flex flex-col gap-1">
+          <label class="font-medium text-sm" for="name">Nombre <span class="text-red-700">*</span></label>
+          <input class="border rounded px-2 py-1" id="name" type="text" formControlName="name" />
+          @if (form.controls.name.errors; as nameErrors) { @if (nameErrors['required'] && (form.controls.name.dirty ||
+          form.controls.name.touched)) {
+          <p class="text-red-700 font-medium text-xs">El nombre es obligatorio</p>
+          } }
+        </div>
+        <div class="flex flex-col gap-1">
+          <label class="font-medium text-sm" for="name">Email</label>
+          <input class="border rounded px-2 py-1" id="name" type="email" formControlName="email" />
+          @if (form.controls.email.errors; as emailErrors) { @if (emailErrors['email'] && (form.controls.email.dirty ||
+          form.controls.email.touched)) {
+          <p class="text-red-700 font-medium text-xs">Ingresa un email válido</p>
+          } }
+        </div>
+        <div class="flex flex-col gap-1">
+          <label class="font-medium text-sm" for="name">Teléfono</label>
+          <input class="border rounded px-2 py-1" id="name" type="text" formControlName="phone" />
+          @if (form.controls.phone.errors; as phoneErrors) { @if ( phoneErrors['minlength'] && (form.controls.phone.dirty
+          || form.controls.phone.touched) ) {
+          <p class="text-red-700 font-medium text-xs">El teléfono debe tener al menos 9 dígitos</p>
+          } }
+        </div>
+        <div class="flex gap-4">
+          <div class="flex flex-col gap-1 grow">
+            <label class="font-medium text-sm" for="name">Dirección</label>
+            <input class="border rounded px-2 py-1" id="name" type="text" formControlName="address" />
+          </div>
+          <div class="flex flex-col gap-1">
+            <label class="font-medium text-sm" for="name">Fecha de nacimiento</label>
+            <input class="border rounded px-2 py-1" id="name" type="date" formControlName="birthDate" />
+          </div>
+        </div>
+        <label class="inline-flex items-center cursor-pointer mt-1">
+          <input type="checkbox" class="sr-only peer" formControlName="active" />
+          <div
+            class="relative w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-2 peer-focus:ring-black rounded-full peer peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-emerald-600"
+          ></div>
+          <span class="ms-3 text-sm font-medium text-black">Activo</span>
+        </label>
+        <span class="text-xs font-medium text-gray-500 mt-2 italic"
+          >Todos los campos marcados con (<span class="text-red-700 text-base">*</span>) son obligatorios.</span
+        >
+      </div>
+    </div>
+    <div class="bg-slate-100 py-4 flex justify-between gap-4 px-4">
+      <button
+        type="button"
+        (click)="remove()"
+        class="text-red-700 font-medium rounded px-3 py-1 w-full sm:w-auto border border-current"
+      >
+      Eliminar
+      </button>
+      <button
+        class="bg-emerald-700 hover:bg-emerald-600 text-white rounded px-3 py-1 font-medium w-full sm:w-auto ml-auto"
+        type="submit"
+      >
+      Editar
+      </button>
+    </div>
+  </form>
+  <div class="flex flex-col pt-4">
+    <div class="flex justify-between">
+      <h2 class="text-xl font-semibold antialiased">Historial</h2>
+    </div>
+    <div class="flex flex-col h-full">
+      <p class="text-sm text-gray-400 font-medium">Registro de las sesiones del cliente</p>
+      <div class="grid place-items-center h-full font-light text-2xl text-gray-400">
+        <p class="grow -mt-12">No hay sesiones con este cliente</p>
+      </div>
+      <!-- <div class="flex flex-col gap-2">
+
+      </div> -->
+    </div>
+  </div>
+</div>

@@ -1,0 +1,25 @@
+<mm-modal-container>
+  <div class="px-4 pt-4 flex justify-between">
+    <h1 class="text-xl font-semibold">Confirmar acción</h1>
+    <button (click)="dialogRef.close()">
+      <lucide-icon [img]="X" />
+    </button>
+  </div>
+  <div class="p-4">
+    <p class="antialiased">{{data.message}}</p>
+  </div>
+  <div class="bg-slate-100 p-4 flex justify-between gap-4">
+    <button
+    (click)="dialogRef.close()"
+      class=" rounded px-3 py-1 antialiased"
+    >
+      Cancelar
+    </button>
+    <button
+    (click)="dialogRef.close(true)"
+      class="bg-red-700 hover:bg-red-600 text-white rounded px-3 py-1 font-medium"
+    >
+      Confirmar
+    </button>
+  </div>
+</mm-modal-container>

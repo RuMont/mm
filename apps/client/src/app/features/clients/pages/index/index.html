@@ -1,10 +1,10 @@
 <h1 class="text-3xl font-bold mb-4">Clientes</h1>
 
 @if (source$ | async; as config) {
-<mm-filter-list [config]="config" [columns]="columns" (rowClicked)="openClientModal($any($event))" (filterChanged)="changeFilter($event)">
+<mm-filter-list [config]="config" [columns]="columns" (rowClicked)="goToClientDetails($any($event))" (filterChanged)="changeFilter($event)">
   <button
     class="bg-emerald-700 text-white whitespace-nowrap py-1 px-2 rounded hover:bg-emerald-600"
-    (click)="openClientModal()"
+    (click)="openCreateClientModal()"
   >
     <lucide-icon class="sm:hidden" name="plus" />
     <span class="hidden sm:inline"> Nuevo <span class="hidden md:inline">cliente</span> </span>

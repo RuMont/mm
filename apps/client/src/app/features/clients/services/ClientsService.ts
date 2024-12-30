@@ -24,7 +24,7 @@ export class ClientsService {
    * @param id Client ID
    */
   getClientById(id: number) {
-    return this.http.get<GenericResponse<ClientDto>>(`${environment.apiUrl}/clients/${id}`);
+    return this.http.get<ClientDto>(`${environment.apiUrl}/clients/${id}`);
   }
 
   /**
