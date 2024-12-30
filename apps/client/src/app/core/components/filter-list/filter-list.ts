@@ -1,8 +1,17 @@
-import { ChangeDetectionStrategy, Component, computed, input, linkedSignal, model, output } from '@angular/core';
-import { ChevronDown, LucideAngularModule, SlidersHorizontal } from 'lucide-angular';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  computed,
+  input,
+  linkedSignal,
+  output,
+  signal,
+} from '@angular/core';
+import { ChevronDown, ChevronLeft, ChevronRight, LucideAngularModule, SlidersHorizontal } from 'lucide-angular';
 import { Columns } from './types';
 import { GenericFilterResponse } from '@mmtypes/GenericFilterResponse';
 import { CdkListbox, CdkOption } from '@angular/cdk/listbox';
+import { GenericFilter } from '@mmtypes/GenericFilter';
 
 @Component({
   selector: 'mm-filter-list',
@@ -11,7 +20,7 @@ import { CdkListbox, CdkOption } from '@angular/cdk/listbox';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class FilterList<T extends Record<string, unknown>[]> {
-  public readonly search = model('');
+  public readonly search = signal('');
   public readonly config = input<GenericFilterResponse<T>>();
 
   public readonly columns = input<Columns<T>>();
@@ -30,11 +39,14 @@ export class FilterList<T extends Record<string, unknown>[]> {
     );
   });
 
-  public readonly pageChanged = output<number>();
-  public readonly itemsPerPageChanged = output<number>();
+  protected readonly maxPage = computed(() => Math.ceil(this.totalElements() / this.itemsPerPage()));
+
   public readonly rowClicked = output<T>();
+  public readonly filterChanged = output<GenericFilter<T[number]>>();
 
   protected readonly ChevronDown = ChevronDown;
+  protected readonly ChevronLeft = ChevronLeft;
+  protected readonly ChevronRight = ChevronRight;
   protected readonly SlidersHorizontal = SlidersHorizontal;
 
   public setSearch(param: string): void;
@@ -47,11 +59,13 @@ export class FilterList<T extends Record<string, unknown>[]> {
       value = param;
     }
     this.search.set(value);
+    this.emitConfigChange();
   }
 
   reset() {
     this.search.set('');
     this.page.set(1);
+    this.emitConfigChange();
   }
 
   assertIsArray(value: unknown): value is Array<T> {
@@ -59,5 +73,22 @@ export class FilterList<T extends Record<string, unknown>[]> {
       return false;
     }
     return true;
+  }
+
+  goToPage(page: number) {
+    if (page < 0) page = 0;
+    if (page > this.maxPage()) {
+      page = this.maxPage();
+    }
+    this.page.set(+page);
+    this.emitConfigChange();
+  }
+
+  emitConfigChange() {
+    this.filterChanged.emit({
+      itemsPerPage: this.itemsPerPage(),
+      page: this.page(),
+      searchTerm: this.search(),
+    });
   }
 }

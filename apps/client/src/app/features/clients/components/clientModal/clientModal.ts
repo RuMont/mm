@@ -1,5 +1,5 @@
 import { DIALOG_DATA, DialogRef } from '@angular/cdk/dialog';
-import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
+import { ChangeDetectionStrategy, Component, inject, signal } from '@angular/core';
 import { FormBuilder, Validators } from '@angular/forms';
 import { UpdateClientDto } from '@mmschemas/client.schema';
 import { ToastOptions } from 'apps/client/src/app/core/ToastOptions';
@@ -29,6 +29,8 @@ export class ClientModal {
     birthDate: this.fb.control(''),
   });
 
+  protected readonly removeAttempted = signal(false);
+
   constructor() {
     if (this.client) {
       const parsedClient = {
@@ -42,6 +44,7 @@ export class ClientModal {
 
   close() {
     this.dialogRef.close();
+    this.removeAttempted.set(false);
   }
 
   submit() {
@@ -74,6 +77,7 @@ export class ClientModal {
       .subscribe((res) => {
         this.dialogRef.close(res);
         if ('message' in res) toast.success(res.message);
+        this.removeAttempted.set(false);
       });
   }
 
@@ -95,11 +99,16 @@ export class ClientModal {
       .subscribe((res) => {
         this.dialogRef.close(res);
         if ('message' in res) toast.success(res.message);
+        this.removeAttempted.set(false);
       });
   }
 
   remove() {
     if (!this.client) return;
+    if (!this.removeAttempted()) {
+      this.removeAttempted.set(true);
+      return;
+    }
     this.clientsService
       .deleteClient(this.client.id)
       .pipe(
@@ -112,6 +121,7 @@ export class ClientModal {
       .subscribe((res) => {
         this.dialogRef.close(res);
         if ('message' in res) toast.success(res.message);
+        this.removeAttempted.set(false);
       });
   }
 }

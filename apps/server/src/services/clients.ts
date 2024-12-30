@@ -40,12 +40,12 @@ async function searchClients(filter: GenericFilter<ClientDto>): Promise<GenericF
     }
   }
 
-  query += ` limit ${filter.itemsPerPage ?? 10} offset ${offset}`;
+  query += ` limit ${offset},${offset + (filter.itemsPerPage ?? 10)}`;
 
   const totalQuery = `select count(*) as total from client`;
 
   try {
-    const filteredData = DB.get<ClientDto[]>(sql`${sql.raw(query)}`);
+    const filteredData = DB.all<ClientDto>(sql`${sql.raw(query)}`);
     const totalResult = DB.get<{ total: number }>(sql`${sql.raw(totalQuery)}`);
     const totalElements = totalResult.total;
 

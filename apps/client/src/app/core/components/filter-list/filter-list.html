@@ -23,7 +23,7 @@
   </div>
 </div>
 
-@let _columns = columns();
+@let _columns = columns(); @let _rows = iterableData();
 <ul id="content" class="mt-4 bg-white rounded shadow">
   @if (_columns) {
   <li class="grid shadow" [style]="'grid-template-columns: repeat('+_columns.length+',minmax(min(170px,100%),1fr))'">
@@ -45,7 +45,7 @@
     </p>
     } }
   </li>
-  @for(row of iterableData(); track $index) {
+  @for(row of _rows; track $index) {
   <li
     cdkListbox
     cdkListboxMultiple
@@ -62,3 +62,24 @@
   <li class="w-100 text-center py-1 text-sm font-semibold">No hay resultados</li>
   } }
 </ul>
+
+@if (totalElements() > _rows.length) {
+<div class="flex gap-4 mt-4 justify-center md:justify-end">
+  <button class="bg-white rounded shadow p-2 [&:not(:disabled):hover]:bg-slate-50 disabled:bg-slate-100 disabled:text-slate-400 transition-colors" [disabled]="page() === 1" (click)="goToPage(page() - 1)">
+    <lucide-icon [img]="ChevronLeft" />
+  </button>
+  <div class="flex items-center gap-2">
+    <input
+      class="w-12 text-center border rounded hover:bg-slate-50"
+      type="text"
+      [value]="page()"
+      (change)="goToPage($any($event.target).value ?? 1)"
+    />
+    <span>/</span>
+    <span>{{maxPage()}}</span>
+  </div>
+  <button class="bg-white rounded shadow p-2 [&:not(:disabled):hover]:bg-slate-50 disabled:bg-slate-100 disabled:text-slate-400 transition-colors" [disabled]="page() === maxPage()" (click)="goToPage(page() + 1)">
+    <lucide-icon [img]="ChevronRight" />
+  </button>
+</div>
+}

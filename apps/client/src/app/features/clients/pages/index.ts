@@ -1,10 +1,12 @@
-import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
+import { ChangeDetectionStrategy, Component, inject, signal } from '@angular/core';
 import { ClientsService } from '../services/ClientsService';
 import { ClientDto } from '@mmschemas/client.schema';
 import { Columns } from '../../../core/components/filter-list/types';
 import { Dialog } from '@angular/cdk/dialog';
 import { ClientModal } from '../components/clientModal/clientModal';
-import { filter, ReplaySubject, switchMap } from 'rxjs';
+import { filter, switchMap } from 'rxjs';
+import { toObservable } from '@angular/core/rxjs-interop';
+import { GenericFilter } from '@mmtypes/GenericFilter';
 
 @Component({
   templateUrl: './index.html',
@@ -15,19 +17,17 @@ export class ClientsIndexPage {
   private clientsService = inject(ClientsService);
   private dialog = inject(Dialog);
 
-  private httpTrigger = new ReplaySubject<void>();
+  filter = signal<GenericFilter<ClientDto>>({
+    itemsPerPage: 10,
+    page: 1,
+    searchTerm: '',
+    // fields: ['name', 'email'],
+  });
 
-  source$ = this.httpTrigger.pipe(
-    switchMap(() =>
-      this.clientsService.searchClients({
-        itemsPerPage: 10,
-        page: 1,
-      }),
-    ),
-  );
+  source$ = toObservable(this.filter).pipe(switchMap((filter) => this.clientsService.searchClients(filter)));
 
   constructor() {
-    this.httpTrigger.next();
+    this.changeFilter(this.filter())
   }
 
   columns: Columns<ClientDto> = [
@@ -48,6 +48,10 @@ export class ClientsIndexPage {
         data: client,
       })
       .closed.pipe(filter(Boolean))
-      .subscribe(() => this.httpTrigger.next());
+      .subscribe(() => this.changeFilter(this.filter()));
+  }
+
+  changeFilter(filter: GenericFilter<ClientDto>) {
+    this.filter.set({...filter});
   }
 }
