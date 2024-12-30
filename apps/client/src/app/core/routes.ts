@@ -22,17 +22,15 @@ export const routes: Route[] = [
     children: [
       {
         path: 'dashboard',
-        loadComponent: () =>
-          import('../features/dashboard/dashboard').then(
-            ({ DashboardPage }) => DashboardPage
-          ),
+        loadComponent: () => import('../features/dashboard/dashboard').then(({ DashboardPage }) => DashboardPage),
       },
       {
         path: 'clients',
-        loadChildren: () =>
-          import('../features/clients/clients.module').then(
-            ({ ClientsModule }) => ClientsModule
-          ),
+        loadChildren: () => import('../features/clients/clients.module').then(({ ClientsModule }) => ClientsModule),
+      },
+      {
+        path: 'sessions',
+        loadChildren: () => import('../features/sessions/sessions.module').then(({ SessionsModule }) => SessionsModule),
       },
     ],
   },

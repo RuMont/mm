@@ -21,14 +21,14 @@ import { GenericFilter } from '@mmtypes/GenericFilter';
 })
 export class FilterList<T extends Record<string, unknown>[]> {
   public readonly search = signal('');
-  public readonly config = input<GenericFilterResponse<T>>();
+  public readonly filter = input<GenericFilterResponse<T>>();
 
   public readonly columns = input<Columns<T>>();
 
-  protected readonly totalElements = computed(() => this.config()?.totalElements ?? 10);
-  protected readonly data = computed(() => this.config()?.data);
-  protected readonly page = linkedSignal(() => this.config()?.page ?? 1);
-  protected readonly itemsPerPage = linkedSignal(() => this.config()?.itemsPerPage ?? 10);
+  protected readonly totalElements = computed(() => this.filter()?.totalElements ?? 10);
+  protected readonly data = computed(() => this.filter()?.data);
+  protected readonly page = linkedSignal(() => this.filter()?.page ?? 1);
+  protected readonly itemsPerPage = linkedSignal(() => this.filter()?.itemsPerPage ?? 10);
 
   protected readonly iterableData = computed(() => {
     const data = this.data();

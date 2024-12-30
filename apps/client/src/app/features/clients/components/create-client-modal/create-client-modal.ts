@@ -1,7 +1,6 @@
-import { DIALOG_DATA, DialogRef } from '@angular/cdk/dialog';
-import { ChangeDetectionStrategy, Component, inject, signal } from '@angular/core';
+import { DialogRef } from '@angular/cdk/dialog';
+import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
 import { FormBuilder, Validators } from '@angular/forms';
-import { UpdateClientDto } from '@mmschemas/client.schema';
 import { ToastOptions } from 'apps/client/src/app/core/ToastOptions';
 import { toast } from 'ngx-sonner';
 import { ClientsService } from '../../services/ClientsService';
@@ -10,7 +9,7 @@ import { HttpErrorResponse } from '@angular/common/http';
 
 @Component({
   standalone: false,
-  templateUrl: './createClientModal.html',
+  templateUrl: './create-client-modal.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class CreateClientModal {

@@ -1,5 +1,5 @@
 import { Injectable, signal } from '@angular/core';
-import { IdCard } from 'lucide-angular';
+import { BetweenHorizontalEnd, IdCard } from 'lucide-angular';
 
 @Injectable({
   providedIn: 'root',
@@ -19,6 +19,11 @@ export class UiService {
       path: '/clients',
       icon: IdCard,
     },
+    {
+      label: 'Sesiones',
+      path: '/sessions',
+      icon: BetweenHorizontalEnd,
+    }
   ];
 
   toggleLoader(state?: boolean) {

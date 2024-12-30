@@ -6,7 +6,7 @@ import { ClientsIndexPage } from './pages/index';
 import { FilterList } from '../../core/components/filter-list/filter-list';
 import { ArrowLeft, LucideAngularModule, Plus, X } from 'lucide-angular';
 import { DialogModule } from '@angular/cdk/dialog';
-import { CreateClientModal } from './components/createClientModal/createClientModal';
+import { CreateClientModal } from './components/create-client-modal/create-client-modal';
 import { ModalContainer } from '../../core/components/modal-container';
 import { ReactiveFormsModule } from '@angular/forms';
 import { NgxSonnerToaster } from 'ngx-sonner';

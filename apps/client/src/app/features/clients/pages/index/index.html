@@ -1,7 +1,12 @@
 <h1 class="text-3xl font-bold mb-4">Clientes</h1>
 
-@if (source$ | async; as config) {
-<mm-filter-list [config]="config" [columns]="columns" (rowClicked)="goToClientDetails($any($event))" (filterChanged)="changeFilter($event)">
+@if (source$ | async; as data) {
+<mm-filter-list
+  [filter]="data"
+  [columns]="columns"
+  (rowClicked)="goToClientDetails($any($event))"
+  (filterChanged)="changeFilter($event)"
+>
   <button
     class="bg-emerald-700 text-white whitespace-nowrap py-1 px-2 rounded hover:bg-emerald-600"
     (click)="openCreateClientModal()"

@@ -3,7 +3,7 @@ import { ClientsService } from '../../services/ClientsService';
 import { ClientDto } from '@mmschemas/client.schema';
 import { Columns } from '../../../../core/components/filter-list/types';
 import { Dialog } from '@angular/cdk/dialog';
-import { CreateClientModal } from '../../components/createClientModal/createClientModal';
+import { CreateClientModal } from '../../components/create-client-modal/create-client-modal';
 import { filter, switchMap } from 'rxjs';
 import { toObservable } from '@angular/core/rxjs-interop';
 import { GenericFilter } from '@mmtypes/GenericFilter';
